@@ -11,14 +11,20 @@ import { mkdirSync, writeFileSync } from "node:fs";
 const STORY = "She married him. Then met him.";
 
 // Guard the gate before writing: exactly six words, 1-60 characters.
-const words = STORY.trim().split(/\s+/);
-if (words.length !== 6) {
-  throw new Error(`expected exactly 6 words, got ${words.length}`);
-}
-if (STORY.length < 1 || STORY.length > 60) {
-  throw new Error(`expected 1-60 characters, got ${STORY.length}`);
+function checkGate(text: string): void {
+  const words = text.trim().split(/\s+/);
+  if (words.length !== 6) {
+    throw new Error(`expected exactly 6 words, got ${words.length}`);
+  }
+  if (text.length < 1 || text.length > 60) {
+    throw new Error(`expected 1-60 characters, got ${text.length}`);
+  }
 }
 
+checkGate(STORY);
+
+// The grader sandbox writes to /output. OUTPUT_DIR only overrides the
+// directory for a local test run on a machine where /output is not writable.
 const outDir = process.env.OUTPUT_DIR ?? "/output";
 mkdirSync(outDir, { recursive: true });
 writeFileSync(`${outDir}/entry.txt`, STORY, "utf8");
